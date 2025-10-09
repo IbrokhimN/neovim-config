@@ -1,5 +1,9 @@
 # My Custom Neovim Config
 
+<td width="30%" align="center">
+      <img src="https://raw.githubusercontent.com/IbrokhimN/neovim-config/refs/heads/main/config_photo.png" alt="IJAI Logo"/>
+</td>
+
 > Beautiful, fast and functional Neovim setup powered by [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 This configuration turns Neovim into a modern IDE with autocompletion, file explorer, status line, fuzzy finder, dashboard, and a cute little **todo manager** 🩷  
