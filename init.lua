@@ -3,15 +3,20 @@ if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({"git","clone","--filter=blob:none","https://github.com/folke/lazy.nvim.git","--branch=stable",lazypath})
 end
 vim.opt.rtp:prepend(lazypath)
+
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.g.mapleader = " "
 
 require("lazy").setup({
-  { "folke/tokyonight.nvim", priority = 1000, config = function()
-      vim.cmd("colorscheme tokyonight")
-    end },
+{
+    "NTBBloodbath/doom-one.nvim",
+    priority = 1000,
+    config = function()
+      vim.cmd("colorscheme doom-one")
+    end,
+  },
 {
   "hrsh7th/nvim-cmp",
   dependencies = {
@@ -19,7 +24,7 @@ require("lazy").setup({
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
-    "L3MON4D3/LuaSnip",
+    "L3MON4D3/LuaSnip", 
     "saadparwaiz1/cmp_luasnip"
   },
   config = function()
@@ -64,8 +69,6 @@ require("lazy").setup({
   end
 },
 
-
-
   { "nvim-tree/nvim-web-devicons", lazy = true },
   { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" }, config = function()
       require("nvim-tree").setup({})
@@ -90,17 +93,26 @@ require("lazy").setup({
             theme = 'doom',
             config = {
                 header = {
-				[[                                                                       ]],
-	[[                                                                     ]],
-	[[       ████ ██████           █████      ██                     ]],
-	[[      ███████████             █████                             ]],
-	[[      █████████ ███████████████████ ███   ███████████   ]],
-	[[     █████████  ███    █████████████ █████ ██████████████   ]],
-	[[    █████████ ██████████ █████████ █████ █████ ████ █████   ]],
-	[[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
-	[[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
-	[[                                                                       ]],
-                },
+	[[=================     ===============     ===============   ========  ========]],
+	[[\\ . . . . . . .\\   //. . . . . . .\\   //. . . . . . .\\  \\. . .\\// . . //]],
+	[[||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .||]],
+	[[|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||]],
+	[[||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||]],
+	[[|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . ||]],
+	[[||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\_ . .|. .||]],
+	[[|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . ||]],
+	[[||_-' ||  .|/    || ||    \|.  || `-_|| ||_-' ||  .|/    || ||   | \  / |-_.||]],
+	[[||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \  / |  `||]],
+	[[||    `'         || ||         `'    || ||    `'         || ||   | \  / |   ||]],
+	[[||            .===' `===.         .==='.`===.         .===' /==. |  \/  |   ||]],
+	[[||         .=='   \_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \/  |   ||]],
+	[[||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \/  |   ||]],
+	[[||   .=='    _-'          '-__\._-'         '-_./__-'         `' |. /|  |   ||]],
+	[[||.=='    _-'                                                     `' |  /==.||]],
+	[[=='    _-'                        N E O V I M                         \/   `==]],
+	[[\   _-'                                                                `-_   /]],
+	[[ `''                                                                      ``' ]],
+		},
                 center = {
 			    {
         icon = '󰱼  ',
@@ -177,8 +189,39 @@ end, {})
 
 
 
+local todo_file = vim.fn.stdpath("data") .. "/todo.txt"
+if vim.fn.empty(vim.fn.glob(todo_file)) > 0 then
+  vim.fn.writefile({
+    "❯ Learn Lua basics ✗",
+    "❯ Setup Neovim plugins ✔",
+    "❯ Drink some water ✗",
+  }, todo_file)
+end
 
+local function toggle_mark()
+  local line = vim.api.nvim_get_current_line()
+  if line:find("✗") then
+    line = line:gsub("✗", "✔")
+  elseif line:find("✔") then
+    line = line:gsub("✔", "✗")
+  else
+    line = line .. " ✔"
+  end
+  vim.api.nvim_set_current_line(line)
+  vim.cmd("silent write!")
+end
 
-
-
+vim.api.nvim_create_user_command("Todo", function()
+  vim.cmd("botright split " .. todo_file)
+  vim.cmd("resize 10")
+  vim.opt_local.number = false
+  vim.opt_local.relativenumber = false
+  vim.opt_local.cursorline = true
+  vim.opt_local.wrap = false
+  vim.opt_local.buflisted = false
+  vim.opt_local.swapfile = false
+  vim.opt_local.winhighlight = "Normal:Normal,CursorLine:Visual"
+  vim.keymap.set("n", "<CR>", function() toggle_mark() end, { buffer = true, silent = true })
+  vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = true, silent = true })
+end, {})
 
