@@ -48,8 +48,7 @@ This configuration turns Neovim into a modern IDE with autocompletion, file expl
    mkdir -p ~/.config/nvim
    cd ~/.config/nvim
    nano init.lua
-````
-
+   
 Paste the contents of your config.
 
 2. Start Neovim:
